@@ -4,7 +4,6 @@ const StatesRouter = express.Router()
 const path = require('path')
 const xss = require('xss')
 const { requireAuth } = require('../middleware/jwt-auth')
-const bodyParser = express.json()
 
 const SanitizeStates = state => ({
     id: state.id,
@@ -13,7 +12,7 @@ const SanitizeStates = state => ({
 
 StatesRouter
     .route('/state')
-    .get((res, req, next) => {
+    .get(requireAuth,(res, req, next) => {
         StatesService.getAllStates(req.app.get('db'))
             .then(state => {
                 res.json(state.map(SanitizeStates))
@@ -37,3 +36,4 @@ StatesRouter
     .get((req,res,next)=>{
         res.json(SanitizeStates(res.state))
     })
+module.exports=StatesRouter
