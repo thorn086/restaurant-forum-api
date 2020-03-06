@@ -5,11 +5,24 @@ const StatesService={
         .from('states')
     },
 
-    getCitiesId(knex, id){
-        return knex('city')
+    getAllCitiesInState(knex, id){
+        return knex
         .select('*')
-        .where('stateId',id)
-        .first()
+        .from('city')
+        .where('state_id', id)
+    },
+    addCity(knex,newCity){
+        return knex
+        .insert(newCity)
+        .into('city')
+        .returning('*')
+        .then(rows=>{
+            return rows[0]})
+    },
+    deleteCity(knex, id){
+        return knex('city')
+        .where('state_id',id)
+        .delete()
     }
 }
 
