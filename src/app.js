@@ -9,6 +9,9 @@ const errorHandler = require('./error-handler')
 const StatesRouter = require('./states/state-router')
 const authRouter = require('./auth/auth-router')
 const usersRouter = require('./users/users-router')
+const EditRouter = require('./restaurant/restaurant-edit-router')
+const CityRouter = require('./City/city-router')
+const RestRouter = require('./restaurant/restaurant-router')
 const app = express()
 
 const morganOption = (NODE_ENV === 'production' 
@@ -27,6 +30,9 @@ app.use(errorHandler)
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/states', StatesRouter)
+app.use('/api/city', CityRouter)
+app.use('/api/restaurant', RestRouter)
+app.use('/api/editrestaurant', EditRouter)
 
 
 

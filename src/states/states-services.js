@@ -21,7 +21,7 @@ const StatesService={
     },
     deleteCity(knex, id){
         return knex('city')
-        .where('state_id',id)
+        .where('id',id)
         .delete()
     }
 }

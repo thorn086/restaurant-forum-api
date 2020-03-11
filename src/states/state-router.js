@@ -35,14 +35,14 @@ StatesRouter
     .get((req, res, next) => {
         StatesService.getAllCitiesInState(req.app.get('db'), req.params.id)
         .then(cities => {
-            if (!cities){
+            if (cities.length ===0 ){
             res.statusMessage='There are no cities in this state, you can add one.'
-                return (res.status(404).end())
+                return res.status(404).end()
             }
             res.json(cities.map(sanitizeCity))
         })
         
-        
+        .catch(next)
     })
     .post(bodyParser, (req,res,next)=>{
         const {name, state_id}=req.body
@@ -51,7 +51,8 @@ StatesRouter
             if (value == null){
                 res.statusMessage= `Missing ${key} in request`
                 return (res.status(400).end())
-            }
+            } 
+        }
             StatesService.addCity(req.app.get('db'), newCity)
             .then(city=>{
                 res
@@ -60,7 +61,7 @@ StatesRouter
                 .json(sanitizeCity(city))
             })
             .catch(next)
-        }
+       
     })
     .delete(bodyParser, (req,res,next)=>{
         const {id}=req.params
