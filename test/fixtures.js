@@ -48,10 +48,10 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
       ...user,
       password: bcrypt.hashSync(user.password, 1)
     }))
-    return db.into('wine_users').insert(preppedUsers)
+    return db.into('users').insert(preppedUsers)
       .then(() =>
         db.raw(
-          `SELECT setval('wine_users_id_seq', ?)`,
+          `SELECT setval('users_id_seq', ?)`,
           [users[users.length - 1].id],
         )
       )
