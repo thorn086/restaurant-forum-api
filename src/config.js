@@ -6,6 +6,4 @@ module.exports = {
     CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000/',
     JWT_SECRET: process.env.JWT_SECRET || 'change-this-secret',
     API_KEY: process.env.REACT_APP_API_KEY,
-    API_TOKEN: process.env.API_TOKEN,
-    API_BASE_URL: process.env.REACT_APP_API_BASE_URL 
   }

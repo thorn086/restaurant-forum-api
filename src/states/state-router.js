@@ -5,7 +5,6 @@ const path = require('path')
 const xss = require('xss')
 const {requireAuth}=require('../middleware/jwt-auth')
 const bodyParser = express.json()
-//const { requireAuth } = require('../middleware/jwt-auth')
 
 const sanitizeStates = state => ({
     id: state.id,
