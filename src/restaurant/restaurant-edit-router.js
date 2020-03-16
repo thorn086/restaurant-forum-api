@@ -2,6 +2,7 @@ const express = require('express')
 const RestService = require('./restaurant-service')
 const EditRouter = express.Router()
 const path = require('path')
+const {requireAuth}=require('../middleware/jwt-auth')
 const xss = require('xss')
 const bodyParser = express.json()
 //const { requireAuth } = require('../middleware/jwt-auth')
@@ -30,5 +31,19 @@ EditRouter
         }
         res.json(restaurants.map(sanitizeRestaurant))
     })
+})
+.patch(requireAuth, bodyParser, (req,res, next)=>{
+    const {address, phone, comments, author}=req.body
+    const updatedRestaurant={address, phone,comments,author}
+    for (const [key, num] of Object.entries(updatedRestaurant))
+      if (num == 0)
+        return res.status(400).json({
+          error: { message: `Body must contain updated content` }
+        })
+       RestService.updateRestaurant(req.app.get('db'),req.params.id, updatedRestaurant) 
+       .then(restaurant => {
+        res.status(204).end()
+      })
+      .catch(next)
 })
 module.exports= EditRouter

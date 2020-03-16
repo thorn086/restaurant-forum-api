@@ -3,6 +3,7 @@ const StatesService = require('./states-services')
 const StatesRouter = express.Router()
 const path = require('path')
 const xss = require('xss')
+const {requireAuth}=require('../middleware/jwt-auth')
 const bodyParser = express.json()
 //const { requireAuth } = require('../middleware/jwt-auth')
 
@@ -44,9 +45,9 @@ StatesRouter
         
         .catch(next)
     })
-    .post(bodyParser, (req,res,next)=>{
-        const {name, state_id}=req.body
-        const newCity = {name, state_id}
+    .post(requireAuth, bodyParser, (req,res,next)=>{
+        const {name, state_id, author}=req.body
+        const newCity = {name, state_id, author}
         for(const [key, value] of Object.entries(newCity)){
             if (value == null){
                 res.statusMessage= `Missing ${key} in request`

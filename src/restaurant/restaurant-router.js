@@ -2,6 +2,7 @@ const express = require('express')
 const RestService = require('./restaurant-service')
 const RestRouter = express.Router()
 const path = require('path')
+const {requireAuth}=require('../middleware/jwt-auth')
 const xss = require('xss')
 const bodyParser = express.json()
 //const { requireAuth } = require('../middleware/jwt-auth')
@@ -49,7 +50,7 @@ RestRouter
         
         
     })
-    .delete(bodyParser, (req,res,next)=>{
+    .delete(requireAuth, bodyParser, (req,res,next)=>{
         const {id}=req.params
         RestService.deleteRestaurant(req.app.get('db'),id)
         .then(affected=>{

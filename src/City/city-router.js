@@ -4,7 +4,7 @@ const CityRouter = express.Router()
 const path = require('path')
 const xss = require('xss')
 const bodyParser = express.json()
-//const { requireAuth } = require('../middleware/jwt-auth')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 
 
@@ -48,7 +48,7 @@ CityRouter
         
         
     })
-    .post(bodyParser, (req,res,next)=>{
+    .post(requireAuth, bodyParser, (req,res,next)=>{
         const {name, address, phone, state_id, city_id, comments}=req.body
         const newRestaurant = {name, address, phone, state_id, city_id,comments}
         for(const [key, value] of Object.entries(newRestaurant)){

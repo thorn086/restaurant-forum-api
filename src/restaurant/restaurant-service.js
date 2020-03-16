@@ -22,6 +22,11 @@ getAllRestaurants(knex){
         return knex('restaurants')
         .where('id',id)
         .delete()
+    },
+    updateRestaurant(knex, id, updatedRestaurant){
+        return knex('restaurants')
+        .where({id})
+        .update(updatedRestaurant)
     }
 }
 
