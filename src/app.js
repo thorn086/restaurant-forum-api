@@ -25,7 +25,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(cors(
-   {origin: 'https://restaurant-forum-app.now.sh'}
+   {origin: CLIENT_ORIGIN}
 ))
  
 
