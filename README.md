@@ -335,7 +335,7 @@ POST
   ```
   ## URL
 ```javascript
-/api/restaurant/id
+/api/editrestaurant/id
 ```
 * Method
 ```
