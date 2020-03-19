@@ -1,26 +1,377 @@
-# Express Boilerplate!
+# Restaurant Forum API
 
-This is a boilerplate project used for starting new projects!
+This RESTful API controls all interactions between the front end Restaurant Forum app and the database.
 
-## Set up
+![Restaurant Forum Home Page](src/images/Home.png)
+![Restaurant Forum State Page](src/images/States.png)
+![Restaurant Forum Login Page](src/images/Login.png)
+![Restaurant Forum Sign Up Page](src/images/Sign-up.png)
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+## Technology
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+This API was built using Node, Express and Knex. The database was built using PostgreSQL.
 
-## Scripts
+## Client Repo
 
-Start the application `npm start`
+https://github.com/thorn086/restaurant-forum-app
 
-Start nodemon for the application `npm run dev`
+## Live Site
 
-Run the tests `npm test`
+https://restaurant-forum-app.now.sh/
 
-## Deploying
+# Using this API
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+## Add User
+Adds user to database
+
+## URL
+```javascript
+/api/users
+```
+* Method
+```
+POST
+```
+* Body Params\
+  First name\
+  Last name\
+  User email\
+  Password
+
+* Success Response\
+  Code: 201
+
+* Error Response\
+  Code: 400
+
+* Sample Call
+  ```javascript
+  fetch(`${API.API_ENDPOINT}/users`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+  ```
+
+***
+
+## Login
+Authenticates user login credentials
+
+## URL
+```javascript
+/api/auth
+```
+* Method
+```
+POST
+```
+* Body Params\
+  User email\
+  Password
+
+* Success Response\
+  Code: 200\
+  Content:
+  ```
+  {
+    authToken: 'authToken',
+    userId: 'userId'
+  }
+  ```
+
+* Error Response\
+  Code: 400
+
+* Sample Call
+  ```javascript
+  fetch(`${API.API_ENDPOINT}/auth/login`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ user_email, password }),
+  })
+  ```
+
+***
+
+## URL
+```javascript
+/api/states
+```
+* Method
+```
+GET
+```
+* Body Params
+  None
+
+* Success Response\
+  Code: 200\
+  Content:
+  ```
+  {
+    states: 'states'
+  }
+  ```
+
+* Error Response\
+  Code: 400
+
+* Sample Call
+  ```javascript
+     fetch(`${config.API_ENDPOINT}/states`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      }
+    })
+      .then(stateResult => {
+        if (!stateResult.ok)
+          throw new Error(stateResult.statusText)
+
+        return stateResult.json()
+      })
+  ```
+
+***
+
+## URL
+```javascript
+/api/city
+```
+* Method
+```
+GET
+```
+* Body Params\
+ id
+
+* Success Response\
+  Code: 201
+
+* Error Response\
+  Code: 400
+
+* Sample Call
+  ```javascript
+    fetch(`${config.API_ENDPOINT}/states/${id}`)
+            .then(res => {
+                if (res.ok)
+                    return res.json()
+                throw new Error(res.statusText)
+
+            })
+  ```
+***
+
+  ## URL
+```javascript
+/api/city/id
+```
+* Method
+```
+POST
+```
+
+* URL Params\
+  ```
+  none
+  ```
+
+* Body Params\
+  name\
+  state_id\
+  author\
+
+* Success Response\
+  Code: 204
+
+* Error Response\
+  Code: 404\
+  Content:
+  ```
+  {
+    error: `There are no restaurants in this city, you can add one.`
+  }
+  ```
+
+* Sample Call
+  ```javascript
+    fetch(`${config.API_ENDPOINT}/states/${id}`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'authorization': `bearer ${TokenService.getAuthToken()}`
+            },
+            body: JSON.stringify(newCity),
+        })
+  ```
+ ## URL
+```javascript
+/api/city/id
+```
+* Method
+```
+DELETE
+```
+
+* URL Params\
+  ```
+  remove a city form state
+  ```
+
+* Body Params\
+  none
+
+* Success Response\
+  Code: 204
+
+* Error Response\
+  Code: 404\
+  Content:
+  ```
+  {
+    error: `There are no cities in this state, you can add one.`
+  }
+  ```
+
+* Sample Call
+  ```javascript
+    fetch(`${config.API_ENDPOINT}/states/${citySelected}`,{
+            method:'DELETE',
+            headers:{
+            'content-type':'application/json',
+            'authorization':`bearer ${TokenService.getAuthToken()}`
+        },
+    })
+  ```
+
+## URL
+```javascript
+/api/restaurant/
+```
+* Method
+```
+GET
+```
+
+* URL Params\
+```
+none
+```
+
+* Body Params\
+  
+
+* Success Response\
+  Code: 204
+
+* Error Response\
+  Code: 404\
+  Content:
+```
+  {
+    error: `There are no restaurants in this city, you can add one.`
+  }
+```
+
+* Sample Call
+  ```javascript
+  fetch(`${config.API_ENDPOINT}/restaurant`,{
+        method:'GET',
+        headers:{
+           'Authorization': `bearer ${TokenService.getAuthToken()}`
+        }
+    })
+  ```
+## URL
+```javascript
+/api/restaurant/id
+```
+* Method
+```
+POST
+```
+
+* URL Params\
+  ```
+  post restaurant to a city
+  ```
+
+* Body Params\
+  name\
+  address\
+  phone\
+  state_id\
+  city_id\
+  comments\
+
+* Success Response\
+  Code: 204
+
+* Error Response\
+  Code: 404\
+  Content:
+  ```
+  {
+    error: `There are no restaurants in this city, you can add one.`
+  }
+  ```
+
+* Sample Call
+  ```javascript
+  fetch(`${config.API_ENDPOINT}/city/${id}`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'authorization': `bearer ${TokenService.getAuthToken()}`
+            },
+            body: JSON.stringify(newRestaurant),
+        })
+  ```
+  ## URL
+```javascript
+/api/restaurant/id
+```
+* Method
+```
+PATCH
+```
+
+* URL Params\
+  ```
+  id
+  ```
+
+* Body Params\
+  address\
+  phone\
+  comments\
+
+* Success Response\
+  Code: 204
+
+* Error Response\
+  Code: 404\
+  Content:
+  ```
+  {
+    error: `There are no restaurants in this city, you can add one.`
+  }
+  ```
+
+* Sample Call
+  ```javascript
+  fetch(`${config.API_ENDPOINT}/editrestaurant/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify(updatedRestaurant)
+    })
+  ```

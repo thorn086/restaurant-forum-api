@@ -25,9 +25,9 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(cors(
-   {origin: CLIENT_ORIGIN}
+  
 ))
- 
+ // {origin: CLIENT_ORIGIN}
 
 app.get('/', (req, res) => {
   res.send('Hello, world!')

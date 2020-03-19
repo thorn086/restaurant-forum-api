@@ -35,7 +35,7 @@ StatesRouter
     .get((req, res, next) => {
         StatesService.getAllCitiesInState(req.app.get('db'), req.params.id)
         .then(cities => {
-            if (cities.length ===0 ){
+            if (cities.length === 0 ){
             res.statusMessage='There are no cities in this state, you can add one.'
                 return res.status(404).end()
             }

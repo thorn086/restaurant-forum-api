@@ -26,7 +26,7 @@ CityRouter
         CityService.getAllRestaurants(req.app.get('db'), req.params.id)
         .then(restaurants => {
             if (!restaurants){
-            res.statusMessage='There are no restaurants in this city, you can add one.'
+            res.statusMessage='There are no cities in this state, you can add one.'
                 return (res.status(404).end())
             }
             res.json(restaurants.map(sanitizeRestaurant))
@@ -40,7 +40,7 @@ CityRouter
         CityService.getAllRestaurantsInCity(req.app.get('db'), req.params.id)
         .then(restaurants => {
             if (!restaurants){
-            res.statusMessage='There are no restaurants in this city, you can add one.'
+            res.statusMessage='There are no cities in this state, you can add one.'
                 return (res.status(404).end())
             }
             res.json(restaurants.map(sanitizeRestaurant))
