@@ -2,7 +2,7 @@ const knex = require('knex');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const app = require('../src/app');
-const { makeUsersArray, makeAuthHeader } = require('./fixtures');
+const { makeUsersArray } = require('./fixtures');
 
 function seedUsers(users) {
   const preppedUsers = users.map((user) => ({
@@ -11,7 +11,13 @@ function seedUsers(users) {
   }));
   return preppedUsers;
 }
-
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+  const token = jwt.sign({ user_name: user.user_name }, secret, {
+    subject: user.user_name,
+    algorithm: 'HS256',
+  });
+  return `bearer ${token}`;
+}
 
 describe('Auth Endpoints', () => {
   let db;
@@ -28,9 +34,9 @@ describe('Auth Endpoints', () => {
 
   after('disconnect from db', () => db.destroy());
 
-  before('clean the table', () => db.raw(`TRUNCATE users RESTART IDENTITY CASCADE`));
+  before('clean the table', () => db.raw(`TRUNCATE users, states, city, restaurants RESTART IDENTITY CASCADE`));
 
-  afterEach('clean the table', () => db.raw(`TRUNCATE users CASCADE`));
+  afterEach('clean the table', () => db.raw(`TRUNCATE users, states, city, restaurants RESTART IDENTITY CASCADE`));
 
   describe('POST /api/auth/login', () => {
     const preppedUsers = seedUsers(testUsers);
