@@ -3,13 +3,13 @@ const CityService={
 getAllRestaurants(knex){
     return knex
     .select('*')
-    .from('restaurants')
+    .from('restaurants');
 },
     getAllRestaurantsInCity(knex, id){
         return knex
         .select('*')
         .from('restaurants')
-        .where('city_id', id)
+        .where('city_id', id);
     },
     addRestaurant(knex,newRestaurant){
         return knex
@@ -17,13 +17,13 @@ getAllRestaurants(knex){
         .into('restaurants')
         .returning('*')
         .then(rows=>{
-            return rows[0]})
+            return rows[0];});
     },
     deleteRestaurant(knex, id){
         return knex('restaurants')
         .where('id',id)
-        .delete()
+        .delete();
     }
-}
+};
 
-module.exports = CityService
+module.exports = CityService;

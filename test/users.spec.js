@@ -1,10 +1,10 @@
-const knex = require('knex')
-const bcrypt = require('bcryptjs')
-const app = require('../src/app')
-const helpers = require('./fixtures')
+const knex = require('knex');
+const bcrypt = require('bcryptjs');
+const app = require('../src/app');
+const helpers = require('./fixtures');
 
 describe('Users Endpoints', function() {
-  let db
+  let db;
 
   let testUsers = [
     {
@@ -35,7 +35,7 @@ describe('Users Endpoints', function() {
       last_name: 'User4',
       password: 'password'
     }
-  ]
+  ];
 
   before('make knex instance', () => {
     db = knex({
@@ -61,7 +61,7 @@ describe('Users Endpoints', function() {
           password: '11AAaa!!',
           first_name: 'test first_name',
           last_name: 'test last_name'
-        }
+        };
         return supertest(app)
           .post('/api/users')
           .set('Content-Type', 'application/json')
@@ -69,12 +69,12 @@ describe('Users Endpoints', function() {
           .send(newUser)
           .expect(201)
           .expect(res => {
-            expect(res.body).to.have.property('id')
-            expect(res.body.user_email).to.eql(newUser.user_email)
-            expect(res.body.first_name).to.eql(newUser.first_name)
-            expect(res.body.last_name).to.eql(newUser.last_name)
-            expect(res.body).to.not.have.property('password')
-            expect(res.headers.location).to.eql(`/api/users/${res.body.id}`)
+            expect(res.body).to.have.property('id');
+            expect(res.body.user_email).to.eql(newUser.user_email);
+            expect(res.body.first_name).to.eql(newUser.first_name);
+            expect(res.body.last_name).to.eql(newUser.last_name);
+            expect(res.body).to.not.have.property('password');
+            expect(res.headers.location).to.eql(`/api/users/${res.body.id}`);
           })
           .expect(res =>
             db
@@ -83,16 +83,16 @@ describe('Users Endpoints', function() {
               .where({ id: res.body.id })
               .first()
               .then(row => {
-                expect(row.user_email).to.eql(newUser.user_email)
-                expect(row.first_name).to.eql(newUser.first_name)
-                expect(row.last_name).to.eql(newUser.last_name)
-                return bcrypt.compare(newUser.password, row.password)
+                expect(row.user_email).to.eql(newUser.user_email);
+                expect(row.first_name).to.eql(newUser.first_name);
+                expect(row.last_name).to.eql(newUser.last_name);
+                return bcrypt.compare(newUser.password, row.password);
               })
               .then(compareMatch => {
-                expect(compareMatch).to.be.true
+                expect(compareMatch).to.equal(true);
               })
-          )
-      })
-    })
-  })
-})
+          );
+      });
+    });
+  });
+});

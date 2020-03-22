@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 function makeUsersArray() {
     return [
@@ -11,7 +11,7 @@ function makeUsersArray() {
         password: 'password',
         date_created: '2029-01-22T16:28:32.615Z'
       }
-    ]
+    ];
   }
 
 function makeStatesArray(){
@@ -22,39 +22,62 @@ function makeStatesArray(){
     { id: 2,
         name:'Arkansas',
     }, 
-    { id: 3,
-        name:'Alaska',
-    }, 
-    { id: 4,
-        name:'Arizona',
+   ];
+}
+function makeCitiesArray(){
+  return[
+    { id: 1,
+      name:"Birmingham",
+      state_id:1, 
+      author:22
+    },
+    {id:2,
+      name:"Anchorage",
+      state_id:1,
+      author: 22},
+    ];
+}
+function makeRestaurants(){
+  return(
+    [{id:1,
+      name:'McDonalds',
+      address:'1500 Lovers Ln',
+      phone:'414-555-1001',
+      state_id: 1,
+      city_id: 1,
+      comments:'This is a great location, good service, great food!',
+      author: '22'
     }]
+  );
 }
 function makeFixtures() {
-    const testUsers = makeUsersArray()
-    const testStates = makeStatesArray()
+    const testUsersTwo = makeUsersArray();
+    const testStates = makeStatesArray();
+    const testCities =makeCitiesArray();
+    const testRestaurants = makeRestaurants();
   
-    return { testUsers, testStates }
+    return { testUsersTwo, testStates, testCities, testRestaurants };
   }
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign({ user_id: user.id }, secret, {
       subject: user.user_email,
       algorithm: 'HS256',
-    })
-    return `Bearer ${token}`
+    });
+    return `Bearer ${token}`;
   }
 
   function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
       ...user,
       password: bcrypt.hashSync(user.password, 1)
-    }))
+    }));
     return db.into('users').insert(preppedUsers)
       .then(() =>
         db.raw(
           `SELECT setval('users_id_seq', ?)`,
           [users[users.length - 1].id],
         )
-      )
+      );
   }
 module.exports={
     makeStatesArray,
@@ -62,4 +85,4 @@ module.exports={
     makeUsersArray,
     makeFixtures,
     seedUsers
-}
+};

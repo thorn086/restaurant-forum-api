@@ -2,23 +2,16 @@ const knex = require('knex');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const app = require('../src/app');
-const { makeUsersArray } = require('./fixtures');
+const { makeUsersArray, makeAuthHeader } = require('./fixtures');
 
 function seedUsers(users) {
   const preppedUsers = users.map((user) => ({
     ...user,
     password: bcrypt.hashSync(user.password, 12),
   }));
-  return preppedUsers
+  return preppedUsers;
 }
 
-function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
-  const token = jwt.sign({ user_name: user.user_name }, secret, {
-    subject: user.user_name,
-    algorithm: 'HS256',
-  });
-  return `bearer ${token}`
-}
 
 describe('Auth Endpoints', () => {
   let db;
@@ -49,7 +42,7 @@ describe('Auth Endpoints', () => {
       const userValidCreds = {
         user_email: testUser.user_email,
         password: testUser.password,
-      }
+      };
       const expectedToken = jwt.sign(
         { user_id: testUser.id },
         process.env.JWT_SECRET,

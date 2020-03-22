@@ -3,31 +3,31 @@ const RestService={
 getAllRestaurants(knex){
     return knex
         .select('*')
-        .from('restaurants')
+        .from('restaurants');
 },
     getAllRestaurantsInCity(knex, id){
         return knex
         .select('*')
         .from('restaurants')
-        .where('city_id', id)
+        .where('city_id', id);
     },
     getRestaurantById(knex, id){
         return knex
         .select('*')
         .from('restaurants')
-        .where('id', id)
+        .where('id', id);
     },
  
     deleteRestaurant(knex, id){
         return knex('restaurants')
         .where('id',id)
-        .delete()
+        .delete();
     },
     updateRestaurant(knex, id, updatedRestaurant){
         return knex('restaurants')
         .where({id})
-        .update(updatedRestaurant)
+        .update(updatedRestaurant);
     }
-}
+};
 
-module.exports = RestService
+module.exports = RestService;

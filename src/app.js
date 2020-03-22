@@ -1,48 +1,45 @@
-require('dotenv').config()
-const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors')
-const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
-const { CLIENT_ORIGIN} = require('./config')
-const errorHandler = require('./error-handler')
-const StatesRouter = require('./states/state-router')
-const authRouter = require('./auth/auth-router')
-const usersRouter = require('./users/users-router')
-const EditRouter = require('./restaurant/restaurant-edit-router')
-const CityRouter = require('./City/city-router')
-const RestRouter = require('./restaurant/restaurant-router')
-const app = express()
+require('dotenv').config();
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const helmet = require('helmet');
+const { NODE_ENV } = require('./config');
+const { CLIENT_ORIGIN} = require('./config');
+const errorHandler = require('./error-handler');
+const StatesRouter = require('./states/state-router');
+const authRouter = require('./auth/auth-router');
+const usersRouter = require('./users/users-router');
+const CityRouter = require('./City/city-router');
+const RestRouter = require('./restaurant/restaurant-router');
+const app = express();
 
-const morganOption = (NODE_ENV === 'production' 
-  ? 'tiny'
-  : 'common')
+const morganOption = (NODE_ENV === 'production' ? 'tiny'
+  : 'common');
 
-app.use(morgan(morganOption))
-app.use(helmet())
+app.use(morgan(morganOption));
+app.use(helmet());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
 app.use(cors(
-  
-))
- // {origin: CLIENT_ORIGIN}
+  {origin: CLIENT_ORIGIN}
+));
+
 
 app.get('/', (req, res) => {
-  res.send('Hello, world!')
-})
+  res.send('Hello, world!');
+});
 
-app.use(errorHandler)
-app.use('/api/auth', authRouter)
-app.use('/api/users', usersRouter)
-app.use('/api/states', StatesRouter)
-app.use('/api/city', CityRouter)
-app.use('/api/restaurant', RestRouter)
-app.use('/api/editrestaurant', EditRouter)
-
+app.use(errorHandler);
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/states', StatesRouter);
+app.use('/api/city', CityRouter);
+app.use('/api/restaurant', RestRouter);
 
 
 
 
-module.exports = app
+
+module.exports = app;

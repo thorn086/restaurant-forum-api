@@ -1,10 +1,10 @@
-const express = require('express')
-const CityService = require('./city-services')
-const CityRouter = express.Router()
-const path = require('path')
-const xss = require('xss')
-const bodyParser = express.json()
-const { requireAuth } = require('../middleware/jwt-auth')
+const express = require('express');
+const CityService = require('./city-services');
+const CityRouter = express.Router();
+const path = require('path');
+const xss = require('xss');
+const bodyParser = express.json();
+const { requireAuth } = require('../middleware/jwt-auth');
 
 
 
@@ -17,7 +17,7 @@ const sanitizeRestaurant = restaurant => ({
     city_id: restaurant.city_id,
     author: xss(restaurant.author),
     comments: xss(restaurant.comments)
-})
+});
 
 
 CityRouter
@@ -26,35 +26,36 @@ CityRouter
         CityService.getAllRestaurants(req.app.get('db'), req.params.id)
         .then(restaurants => {
             if (!restaurants){
-            res.statusMessage='There are no cities in this state, you can add one.'
-                return (res.status(404).end())
+            res.statusMessage='There are no cities in this state, you can add one.';
+                return (res.status(404).end());
             }
-            res.json(restaurants.map(sanitizeRestaurant))
-        })
+            res.json(restaurants.map(sanitizeRestaurant));
+        });
         
         
-    })
+    });
+    //finds all the restaurants in a city
 CityRouter
     .route('/:id')
     .get((req, res, next) => {
         CityService.getAllRestaurantsInCity(req.app.get('db'), req.params.id)
         .then(restaurants => {
-            if (!restaurants){
-            res.statusMessage='There are no cities in this state, you can add one.'
-                return (res.status(404).end())
+            if (restaurants < 1){
+            res.statusMessage='There are no cities in this state, you can add one.';
+                return (res.status(404).end());
             }
-            res.json(restaurants.map(sanitizeRestaurant))
-        })
+            res.json(restaurants.map(sanitizeRestaurant));
+        });
         
         
     })
     .post(requireAuth, bodyParser, (req,res,next)=>{
-        const {name, address, phone, state_id, city_id, comments}=req.body
-        const newRestaurant = {name, address, phone, state_id, city_id,comments}
+        const {name, address, phone, state_id, city_id, comments}=req.body;
+        const newRestaurant = {name, address, phone, state_id, city_id,comments};
         for(const [key, value] of Object.entries(newRestaurant)){
             if (value == null){
-                res.statusMessage= `Missing ${key} in request`
-                return (res.status(400).end())
+                res.statusMessage= `Missing ${key} in request`;
+                return (res.status(400).end());
             } 
         }
             CityService.addRestaurant(req.app.get('db'), newRestaurant)
@@ -62,10 +63,10 @@ CityRouter
                 res
                 .status(201)
                 .location(path.posix.join(req.originalUrl))
-                .json(sanitizeRestaurant(Restaurant))
+                .json(sanitizeRestaurant(Restaurant));
             })
-            .catch(next)
+            .catch(next);
        
-    })
+    });
   
-module.exports = CityRouter
+module.exports = CityRouter;
