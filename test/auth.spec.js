@@ -30,7 +30,7 @@ describe('Auth Endpoints', () => {
 
   before('clean the table', () => db.raw(`TRUNCATE users RESTART IDENTITY CASCADE`));
 
-  afterEach('clean the table', () => db.raw(`TRUNCATE users RESTART IDENTITY CASCADE`));
+  afterEach('clean the table', () => db.raw(`TRUNCATE users CASCADE`));
 
   describe('POST /api/auth/login', () => {
     const preppedUsers = seedUsers(testUsers);
