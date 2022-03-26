@@ -29,7 +29,7 @@
     "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.20.7",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "mocha": "^6.2.2",
     "morgan": "^1.9.1",
     "pg": "^7.17.1",
